@@ -404,7 +404,7 @@ func (t *Topology) Rules(cni, iptablesForwardRule bool) iptables.RuleSet {
 		// We only want to NAT in locations of the corresponding allowed location IPs.
 		if t.location == s.location {
 			for _, alip := range s.allowedLocationIPs {
-				rules.AddToPrepend(iptables.NewRule(iptables.GetProtocol(alip.IP), "nat", "POSTROUTING", "-d", alip.String(), "-m", "comment", "--comment", "Kilo: jump to NAT chain", "-j", "KILO-NAT"))
+				rules.AddToPrepend(iptables.NewRule(iptables.GetProtocol(alip.IP), "nat", "POSTROUTING", "-d", alip.String(), "!", "-s", alip.String(), "-m", "comment", "--comment", "Kilo: jump to NAT chain", "-j", "KILO-NAT"))
 			}
 		}
 	}
